@@ -27,6 +27,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.ClearCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
 
 import com.google.android.gms.auth.api.identity.AuthorizationRequest;
 import com.google.android.gms.auth.api.identity.AuthorizationResult;
@@ -92,6 +93,11 @@ public class GoogleSignInHelper {
     Exception e = task.getException();
     if(e != null)
     {
+      if (e instanceof GetCredentialCancellationException) {
+        logDebug("onFailure with CANCELED : " + e.getClass().toString() + " " + e.getMessage());
+        return CommonStatusCodes.CANCELED;
+      }
+
       logError("onFailure with INTERNAL_ERROR : " + e.getClass().toString() + " " + e.getMessage());
       return CommonStatusCodes.INTERNAL_ERROR;
     }
