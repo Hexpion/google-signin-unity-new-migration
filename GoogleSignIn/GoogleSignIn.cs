@@ -14,14 +14,13 @@
 //  limitations under the License.
 // </copyright>
 
+using System;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Google.Impl;
+
 namespace Google
 {
-    using System;
-    using System.Runtime.Serialization;
-    using System.Threading.Tasks;
-    using Google.Impl;
-    using UnityEngine;
-
     /// <summary>
     /// Google sign in API.
     /// </summary>
@@ -195,6 +194,11 @@ namespace Google
             impl.Disconnect();
         }
 
+        public void CancelPending()
+        {
+            impl.Cancel();
+        }
+
         /// <summary>
         /// Sign in exception.  This is a checked exception for handling specific
         /// errors during the sign-in process.
@@ -238,5 +242,6 @@ namespace Google
         void EnableDebugLogging(bool flag);
         void SignOut();
         void Disconnect();
+        void Cancel();
     }
 } // namespace Google

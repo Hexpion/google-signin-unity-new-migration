@@ -1,16 +1,15 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Net;
 using System.Net.NetworkInformation;
-
-using UnityEngine;
-
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Google.Impl
 {
@@ -30,6 +29,11 @@ namespace Google.Impl
     }
 
     public void Disconnect()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Cancel()
     {
       throw new NotImplementedException();
     }
@@ -74,7 +78,7 @@ namespace Google.Impl
           listener.Start();
           return listener;
         }
-        catch(System.Exception e)
+        catch(Exception e)
         {
           Debug.LogException(e);
           return null;
@@ -105,7 +109,7 @@ namespace Google.Impl
           Debug.Log(task);
           var context = task.Result;
           var queryString = context.Request.Url.Query;
-          var queryDictionary = System.Web.HttpUtility.ParseQueryString(queryString);
+          var queryDictionary = HttpUtility.ParseQueryString(queryString);
           if(queryDictionary == null || queryDictionary.Get("code") is not string code || string.IsNullOrEmpty(code))
           {
             Status = GoogleSignInStatusCode.INVALID_ACCOUNT;
