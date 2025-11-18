@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using UnityEngine;
+
 #if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
 // <copyright file="GoogleSignInImpl.cs" company="Google Inc.">
 // Copyright (C) 2017 Google Inc. All Rights Reserved.
@@ -16,13 +24,6 @@
 // </copyright>
 
 namespace Google.Impl {
-	using System;
-	using System.Text;
-    using System.Linq;
-	using System.Collections.Generic;
-	using System.Runtime.InteropServices;
-
-	using UnityEngine;
 #if UNITY_2022_2_OR_NEWER
 #else
 	using System.Reflection;
@@ -94,6 +95,11 @@ namespace Google.Impl {
 	public void Disconnect() {
 		GoogleSignIn_Disconnect(SelfPtr());
 	}
+
+    public void Cancel()
+    {
+        GoogleSignIn_DisposeFuture(SelfPtr());
+    }
 
 #if UNITY_ANDROID
 	static AndroidJavaClass GoogleSignInHelper = new AndroidJavaClass("com.google.googlesignin.GoogleSignInHelper");
@@ -206,7 +212,7 @@ namespace Google.Impl {
 				idTokenPart += new string('=',4 - mod);
 			var idTokenFromBase64 = Convert.FromBase64String(idTokenPart);
 			var idToken = Encoding.UTF8.GetString(idTokenFromBase64);
-			var jobj = Newtonsoft.Json.Linq.JObject.Parse(idToken);
+			var jobj = JObject.Parse(idToken);
 			return jobj?["sub"]?.ToString();
 		}
 		catch(Exception e)
